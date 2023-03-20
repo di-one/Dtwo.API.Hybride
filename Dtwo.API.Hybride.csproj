@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dtwo.API.Dofus2\Dtwo.API.Dofus2.csproj" />
+    <ProjectReference Include="..\Dtwo.API.DofusBase\Dtwo.API.DofusBase.csproj" />
+    <ProjectReference Include="..\Dtwo.API.Retro\Dtwo.API.Retro.csproj" />
+    <ProjectReference Include="..\Dtwo.Json\Dtwo.Json.csproj" />
+  </ItemGroup>
+
+</Project>
