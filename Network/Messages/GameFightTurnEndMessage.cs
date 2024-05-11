@@ -8,12 +8,24 @@
         {
             if (RetroMessage != null)
             {
-                Build(RetroMessage as Retro.AnkamaGames.Dofus.Network.Messages.GameFightTurnEndMessage);
+                var message = RetroMessage as Retro.AnkamaGames.Dofus.Network.Messages.GameFightTurnEndMessage;
+                if (message == null)
+                {
+                    return false;
+                }
+
+                Build(message);
                 return true;
             }
             else if (Dofus2Message != null)
             {
-                Build(Dofus2Message as Dofus2.AnkamaGames.Network.Messages.GameFightTurnEndMessage);
+                var message = Dofus2Message as Dofus2.AnkamaGames.Network.Messages.GameFightTurnEndMessage;
+                if (message == null)
+                {
+                    return false;
+                }
+
+                Build(message);
                 return true;
             }
             else

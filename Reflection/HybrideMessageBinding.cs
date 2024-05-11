@@ -6,10 +6,10 @@ namespace Dtwo.API.Hybride.Reflection
     public class HybrideMessageBinding
     {
         [DataMember]
-        public string RetroIdentifier { get; set; }
+        public string? RetroIdentifier { get; set; }
         [DataMember]
-        public string Dofus2Identifier { get; set; }
+        public string? Dofus2Identifier { get; set; }
         [DataMember]
-        public string ClassName { get; set; }
+        public string? ClassName { get; set; }
     }
 }

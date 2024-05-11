@@ -4,7 +4,7 @@ namespace Dtwo.API.Hybride.Network.Messages
 {
     public class CharacterSelectedSuccessMessage : HybrideMessage
     {
-        public CharacterInformations CharacterInformations { get; private set; }
+        public CharacterInformations? CharacterInformations { get; private set; }
         
         public CharacterSelectedSuccessMessage(CharacterInformations characterInformations)
         {
@@ -20,12 +20,24 @@ namespace Dtwo.API.Hybride.Network.Messages
         {
             if (RetroMessage != null)
             {
-                Build(RetroMessage as Retro.AnkamaGames.Dofus.Network.Messages.CharacterSelectedSuccessMessage);
+                var message = RetroMessage as Retro.AnkamaGames.Dofus.Network.Messages.CharacterSelectedSuccessMessage;
+                if (message == null)
+                {
+                    return false;
+                }
+
+                Build(message);
                 return true;
             }
             else if (Dofus2Message != null)
             {
-                Build(Dofus2Message as Dofus2.AnkamaGames.Network.Messages.CharacterSelectedSuccessMessage);
+                var message = Dofus2Message as Dofus2.AnkamaGames.Network.Messages.CharacterSelectedSuccessMessage;
+                if (message == null)
+                {
+                    return false;
+                }
+
+                Build(message);
                 return true;
             }
             else
@@ -38,7 +50,6 @@ namespace Dtwo.API.Hybride.Network.Messages
         
         private void Build(Dofus2.AnkamaGames.Network.Messages.CharacterSelectedSuccessMessage d2Message)
         {
-            Console.WriteLine("BUILD MESSAGE : " + d2Message.infos.id);
             double id = d2Message.infos.id;
             string name = d2Message.infos.name;
             bool sex = d2Message.infos.sex;
