@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Dtwo.API.Dofus2.Network.Messages;
+using Dtwo.API.DofusBase;
 using Dtwo.API.DofusBase.Data;
 using Dtwo.API.DofusBase.Reflection;
 using Dtwo.API.Hybride.Network.Messages;
@@ -21,7 +22,7 @@ namespace Dtwo.API.Hybride.Reflection
             Instance = this;
         }
 
-        public bool InitializeMessages(string filePath)
+        public bool InitializeMessages(EDofusVersion version, string filePath)
         {
             LogManager.Log("Load hybride messages");
             int loadedMessages = 0;
@@ -32,7 +33,7 @@ namespace Dtwo.API.Hybride.Reflection
                 return false;
             }
 
-            var bindings = UpdateAndLoadHybrideMessagesBinding(filePath);
+            var bindings = UpdateAndLoadHybrideMessagesBinding(version, filePath);
             if (bindings == null)
             {
                 LogManager.LogError($"{nameof(HybrideMessagesLoader)}.{InitializeMessages}", "Binding is null");
@@ -110,7 +111,7 @@ namespace Dtwo.API.Hybride.Reflection
             return true;
         }
 
-        private List<HybrideMessageBinding>? UpdateAndLoadHybrideMessagesBinding(string filePath)
+        private List<HybrideMessageBinding>? UpdateAndLoadHybrideMessagesBinding(EDofusVersion version, string filePath)
         {
             string hybrideBindingInfosPath = Dtwo.API.Paths.HybrideBindingInfosPath;
             if (File.Exists(hybrideBindingInfosPath) == false)
@@ -146,25 +147,29 @@ namespace Dtwo.API.Hybride.Reflection
                 return null;
             }
 
-            int modifiedIds = 0;
-
-            for (int i = 0; i < bindings.Count; i++)
+            // Rebind D2 messages if necessary
+            if (version == EDofusVersion.Two)
             {
-                var binding = bindings[i];
-                string? dofus2MessageId;
+                int modifiedIds = 0;
 
-                if (binding.ClassName == null)
+                for (int i = 0; i < bindings.Count; i++)
                 {
-                    LogManager.LogWarning($"{nameof(HybrideMessagesLoader)}.{UpdateAndLoadHybrideMessagesBinding}", $"Error on MessageLoader.LoadMessage : The class name is null");
-                    continue;
-                }
+                    var binding = bindings[i];
+                    string? dofus2MessageId;
 
-                if (Dtwo.API.Dofus2.Reflection.Dofus2MessagesLoader.Instance.MessagesByType.TryGetValue(binding.ClassName, out dofus2MessageId) == false)
-                {
-                    if (dofus2MessageId != binding.Dofus2Identifier)
+                    if (binding.ClassName == null)
                     {
-                        modifiedIds++;
-                        binding.Dofus2Identifier = dofus2MessageId;
+                        LogManager.LogWarning($"{nameof(HybrideMessagesLoader)}.{UpdateAndLoadHybrideMessagesBinding}", $"Error on MessageLoader.LoadMessage : The class name is null");
+                        continue;
+                    }
+
+                    if (Dtwo.API.Dofus2.Reflection.Dofus2MessagesLoader.Instance.MessagesByType.TryGetValue(binding.ClassName, out dofus2MessageId) == false)
+                    {
+                        if (dofus2MessageId != binding.Dofus2Identifier)
+                        {
+                            modifiedIds++;
+                            binding.Dofus2Identifier = dofus2MessageId;
+                        }
                     }
                 }
             }

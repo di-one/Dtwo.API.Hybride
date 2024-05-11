@@ -11,7 +11,7 @@ namespace Dtwo.API.Hybride
             DofusVersion = version;
 
             HybrideMessagesLoader loader = new HybrideMessagesLoader();
-            loader.InitializeMessages(messagesPath);
+            loader.InitializeMessages(version, messagesPath);
         }
     }
 }
